@@ -10,13 +10,39 @@ namespace HospitalAppointment
 	{
 		public LinkList<Patient> AllPatients = new LinkList<Patient>();
 		public TreeList treeList = new TreeList();
+		public TimeSpan StartTime = new TimeSpan(9,0,0);
+		public TimeSpan EndTime = new TimeSpan(17, 0, 0);
 
 		public void Start()
 		{
 			Patient.OrganizePatients(AllPatients);
-			foreach (var patient in AllPatients)
+			/*
+			treeList.AddElement(AllPatients.root.Data);
+			AllPatients.ExtractToHead();*/
+		}
+		public void GetRegister(TimeSpan RegisterTime)
+		{
+			if (RegisterTime == AllPatients.root.Data.RegisterTime)
 			{
-				treeList.AddElement(patient);
+				AllPatients.root.Data.PriorityPoint = PatientStatus.CalculatePriortyPoint(AllPatients.root.Data);
+				AllPatients.root.Data.InspectionDuration = PatientStatus.CalculatePriortyPoint(AllPatients.root.Data);
+				treeList.AddElement(AllPatients.root.Data);
+				AllPatients.ExtractToHead();
+				PrintList();
+			}
+
+		}
+		public void SendInspection(TimeSpan Time)
+		{
+			if(Time > StartTime && Time< EndTime) 
+			{
+				Patient next = NextPatient();
+				next.InspectionTime = Time;
+				TimeSpan inspection = new TimeSpan(0,0,next.InspectionDuration);
+				if(next.InspectionTime + inspection == Time)
+				{
+					return;
+				}
 			}
 		}
 
@@ -26,11 +52,13 @@ namespace HospitalAppointment
 			{
 				Console.WriteLine(Tnode.Data.toString());
 			}
+			Console.WriteLine("Yeni hasta sisteme eklendi");
 		}
-		public void Next()
+		public Patient NextPatient()
 		{
 			Patient next = treeList.ExtractElement();
-			Console.WriteLine(next.toString());
+			PrintList();
+			return next;
 		}
 
 	}

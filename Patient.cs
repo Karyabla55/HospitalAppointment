@@ -56,8 +56,8 @@ namespace HospitalAppointment
 						TimeSpan RegisterTime = StringToTime(PatientData[7]);
 
 						Patient patient = new Patient(PatientName, PatiensAge, Gender, IsPrisoner, Disabilty, Bleeding, RegisterTime);
-						patient.PriorityPoint = PatientStatus.CalculatePriortyPoint(patient);
-						patient.InspectionDuration = PatientInspection.CalculateInspectionDuration(patient);
+						/*patient.PriorityPoint = PatientStatus.CalculatePriortyPoint(patient);
+						patient.InspectionDuration = PatientInspection.CalculateInspectionDuration(patient);*/
 						Patients.addToLast(patient);
 					}
 					SortForRegisterTime(Patients);

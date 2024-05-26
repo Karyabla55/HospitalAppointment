@@ -23,7 +23,7 @@ namespace HospitalAppointment
 				LeftC = null;
 			}
 		}
-		TNode root;
+		public TNode root;
 		public TreeList() { root = null; }
 
 		public void AddElement(Patient data)
@@ -97,19 +97,27 @@ namespace HospitalAppointment
 			HeapifyDown(root);
 			return next;
 		}
-		private TNode HeapifyDown(TNode root)
+		private void HeapifyDown(TNode root)
 		{
 			TNode current = root;
 			while (current.LeftC != null)
 			{
 				TNode largerChild = current.LeftC;
-				if (current.RightC != null && current.RightC.Data.PriorityPoint >= current.LeftC.Data.PriorityPoint)
+				if (current.RightC != null)
 				{
-					largerChild = current.RightC;
-					Swap(largerChild, current);
-					current = largerChild;
+					if (current.LeftC.Data.PriorityPoint > current.RightC.Data.PriorityPoint)
+					{
+						Swap(largerChild, current);
+						current = largerChild;
+					}
+					else if (current.RightC.Data.PriorityPoint >= current.LeftC.Data.PriorityPoint)
+					{
+						largerChild = current.RightC;
+						Swap(largerChild, current);
+						current = largerChild;
+					}
 				}
-				else if (current.RightC != null && current.LeftC.Data.PriorityPoint > current.RightC.Data.PriorityPoint)
+				else
 				{
 					Swap(largerChild, current);
 					current = largerChild;
@@ -118,9 +126,7 @@ namespace HospitalAppointment
 			if (current.LeftC == null && current.RightC == null)
 			{
 				current = null;
-				return current;
 			}
-			return null;
 		}
 
 		private TNode GetParent(TNode node)
