@@ -26,15 +26,14 @@ namespace HospitalAppointment
 		}
 		private void Timer_Tick(object sender, EventArgs e)
 		{
-			
-			simulatedTime = simulatedTime.AddSeconds(60);
+
+			simulatedTime = simulatedTime.AddSeconds(120);
 			system.GetRegister(DateTimeToTimeSpan(simulatedTime));
-			if (DateTimeToTimeSpan(simulatedTime) >= system.StartTime && DateTimeToTimeSpan(simulatedTime) < system.EndTime && system.treeList !=null) 
+			if (DateTimeToTimeSpan(simulatedTime) >= system.StartTime && system.treeList != null)
 			{
 				if (system.treeList != null && !system.RoomIsFull)
 				{
 					SendedPatient = system.Next();
-					Invalidate();
 					system.SendInspection(DateTimeToTimeSpan(simulatedTime));
 				}
 				else if (SendedPatient.InspectionDuration + SendedPatient.InspectionTime <= DateTimeToTimeSpan(simulatedTime))
@@ -43,7 +42,7 @@ namespace HospitalAppointment
 				}
 				lblPatient.Text = "Hasta: " + SendedPatient.toString();
 			}
-			
+
 			lblTime.Text = simulatedTime.ToString("HH:mm:ss");
 			Invalidate();
 		}
@@ -74,7 +73,7 @@ namespace HospitalAppointment
 			g.DrawRectangle(Pens.Black, rect);
 
 			// Düğüm bilgilerini yaz
-			string nodeInfo = $"{node.Data.PatientName}\nYaş: {node.Data.PatientAge}\nÖncelik Puanı: {node.Data.PriorityPoint}";
+			string nodeInfo = $"Kayıt Sırası: {node.Data.PatientNo}\nİsim:{node.Data.PatientName}\nYaş: {node.Data.PatientAge}\nÖncelik Puanı: {node.Data.PriorityPoint}";
 			using (Font font = new Font("Arial", 8))
 			{
 				g.DrawString(nodeInfo, font, Brushes.Black, rect);

@@ -24,24 +24,24 @@ namespace HospitalAppointment
 		}
 		public void GetRegister(TimeSpan RegisterTime)
 		{
-			if (RegisterTime == AllPatients.root.Data.RegisterTime)
+			if ( AllPatients.root != null  )
 			{
-				AllPatients.root.Data.PriorityPoint = PatientStatus.CalculatePriortyPoint(AllPatients.root.Data);
-				AllPatients.root.Data.InspectionDuration = PatientInspection.CalculateInspectionDuration(AllPatients.root.Data);
-				treeList.AddElement(AllPatients.root.Data);
-				AllPatients.ExtractToHead();
-				PrintList();
+				if(RegisterTime >= AllPatients.root.Data.RegisterTime)
+				{
+					AllPatients.root.Data.PriorityPoint = PatientStatus.CalculatePriortyPoint(AllPatients.root.Data);
+					AllPatients.root.Data.InspectionDuration = PatientInspection.CalculateInspectionDuration(AllPatients.root.Data);
+					treeList.AddElement(AllPatients.root.Data);
+					AllPatients.ExtractToHead();
+					PrintList();
+				}
+				
 			}
-
-		}
+        }
 		public void SendInspection(TimeSpan Time)
 		{
-
-
 			Patient next = NextPatient();
 			next.InspectionTime = Time;
 			RoomIsFull = true;
-
 		}
 
 		public void PrintList()

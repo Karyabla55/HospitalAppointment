@@ -28,7 +28,6 @@ namespace HospitalAppointment
 
 		public void AddElement(Patient data)
 		{
-
 			TNode newNode = new TNode(data);
 			if (root == null)
 			{
@@ -38,7 +37,6 @@ namespace HospitalAppointment
 			{
 				LinkList<TNode> listFillTree = new LinkList<TNode>();
 				listFillTree.addToLast(root);
-
 
 				while (listFillTree.size > 0)
 				{
@@ -61,14 +59,9 @@ namespace HospitalAppointment
 					{
 						listFillTree.addToLast(current.LeftC);
 						listFillTree.addToLast(current.RightC);
-
 					}
-
 				}
 			}
-
-
-
 		}
 		private void HeapifyUp(TNode node)
 		{
@@ -89,22 +82,17 @@ namespace HospitalAppointment
 		}
 		public Patient ExtractElement()
 		{
-
 			if (root == null)
 			{
 				return null;
 			}
 
 			Patient extractedData = root.Data;
-
-			// Find the last node
 			TNode lastNode = GetLastNode();
 			if (lastNode != root)
 			{
-				// Replace root data with last node data
 				root.Data = lastNode.Data;
 
-				// Remove the last node
 				TNode parent = GetParent(lastNode);
 				if (parent.LeftC == lastNode)
 				{
@@ -115,8 +103,7 @@ namespace HospitalAppointment
 					parent.RightC = null;
 				}
 
-				// Heapify down the root to restore heap property
-				HeapifyUp(root);
+				HeapifyDown(root);
 			}
 			else
 			{
@@ -124,6 +111,37 @@ namespace HospitalAppointment
 			}
 
 			return extractedData;
+		}
+
+
+		private void HeapifyDown(TNode node)
+		{
+			TNode largest = node;
+			while (true)
+			{
+				TNode left = node.LeftC;
+				TNode right = node.RightC;
+
+				if (left != null && left.Data.PriorityPoint > largest.Data.PriorityPoint)
+				{
+					largest = left;
+				}
+
+				if (right != null && right.Data.PriorityPoint > largest.Data.PriorityPoint)
+				{
+					largest = right;
+				}
+
+				if (largest != node)
+				{
+					Swap(node, largest);
+					node = largest;
+				}
+				else
+				{
+					break;
+				}
+			}
 		}
 
 
