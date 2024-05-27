@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static HospitalAppointment.TreeList;
 
 namespace HospitalAppointment
 {
@@ -10,7 +11,8 @@ namespace HospitalAppointment
 	{
 		public LinkList<Patient> AllPatients = new LinkList<Patient>();
 		public TreeList treeList = new TreeList();
-		public TimeSpan StartTime = new TimeSpan(9,0,0);
+		public bool RoomIsFull = false;
+		public TimeSpan StartTime = new TimeSpan(9, 0, 0);
 		public TimeSpan EndTime = new TimeSpan(17, 0, 0);
 
 		public void Start()
@@ -25,7 +27,7 @@ namespace HospitalAppointment
 			if (RegisterTime == AllPatients.root.Data.RegisterTime)
 			{
 				AllPatients.root.Data.PriorityPoint = PatientStatus.CalculatePriortyPoint(AllPatients.root.Data);
-				AllPatients.root.Data.InspectionDuration = PatientStatus.CalculatePriortyPoint(AllPatients.root.Data);
+				AllPatients.root.Data.InspectionDuration = PatientInspection.CalculateInspectionDuration(AllPatients.root.Data);
 				treeList.AddElement(AllPatients.root.Data);
 				AllPatients.ExtractToHead();
 				PrintList();
@@ -34,16 +36,12 @@ namespace HospitalAppointment
 		}
 		public void SendInspection(TimeSpan Time)
 		{
-			if(Time > StartTime && Time< EndTime) 
-			{
-				Patient next = NextPatient();
-				next.InspectionTime = Time;
-				TimeSpan inspection = new TimeSpan(0,0,next.InspectionDuration);
-				if(next.InspectionTime + inspection == Time)
-				{
-					return;
-				}
-			}
+
+
+			Patient next = NextPatient();
+			next.InspectionTime = Time;
+			RoomIsFull = true;
+
 		}
 
 		public void PrintList()
@@ -57,8 +55,13 @@ namespace HospitalAppointment
 		public Patient NextPatient()
 		{
 			Patient next = treeList.ExtractElement();
-			PrintList();
+			Console.Write(next.toString()+" ");
+			Console.WriteLine("Muayneye hasta gönderildi");
 			return next;
+		}
+		public Patient Next()
+		{
+			return treeList.root.Data;
 		}
 
 	}

@@ -9,13 +9,14 @@ namespace HospitalAppointment
 		Appointment system;
 		private System.Windows.Forms.Timer timer;
 		private DateTime simulatedTime;
+		Patient SendedPatient;
 
 		public frmAppointment()
 		{
 			InitializeComponent();
 			system = new Appointment();
 			system.Start();
-			
+
 			simulatedTime = new DateTime(2024, 5, 28, 8, 0, 0);
 			// Timer'ı oluştur ve ayarla
 			timer = new System.Windows.Forms.Timer();
@@ -25,15 +26,30 @@ namespace HospitalAppointment
 		}
 		private void Timer_Tick(object sender, EventArgs e)
 		{
-			simulatedTime = simulatedTime.AddSeconds(30);
+			
+			simulatedTime = simulatedTime.AddSeconds(60);
 			system.GetRegister(DateTimeToTimeSpan(simulatedTime));
-			system.SendInspection(DateTimeToTimeSpan(simulatedTime));
+			if (DateTimeToTimeSpan(simulatedTime) >= system.StartTime && DateTimeToTimeSpan(simulatedTime) < system.EndTime && system.treeList !=null) 
+			{
+				if (system.treeList != null && !system.RoomIsFull)
+				{
+					SendedPatient = system.Next();
+					Invalidate();
+					system.SendInspection(DateTimeToTimeSpan(simulatedTime));
+				}
+				else if (SendedPatient.InspectionDuration + SendedPatient.InspectionTime <= DateTimeToTimeSpan(simulatedTime))
+				{
+					system.RoomIsFull = false;
+				}
+				lblPatient.Text = "Hasta: " + SendedPatient.toString();
+			}
+			
 			lblTime.Text = simulatedTime.ToString("HH:mm:ss");
 			Invalidate();
 		}
 		private TimeSpan DateTimeToTimeSpan(DateTime Time)
 		{
-			TimeSpan time =TimeSpan.Parse(Time.ToString("HH:mm:ss"));
+			TimeSpan time = TimeSpan.Parse(Time.ToString("HH:mm:ss"));
 			return time;
 		}
 		protected override void OnPaint(PaintEventArgs e)
@@ -58,7 +74,7 @@ namespace HospitalAppointment
 			g.DrawRectangle(Pens.Black, rect);
 
 			// Düğüm bilgilerini yaz
-			string nodeInfo = $"{node.Data.PatientName}\nYaş: {node.Data.PatientAge}\nPuan: {node.Data.PriorityPoint}";
+			string nodeInfo = $"{node.Data.PatientName}\nYaş: {node.Data.PatientAge}\nÖncelik Puanı: {node.Data.PriorityPoint}";
 			using (Font font = new Font("Arial", 8))
 			{
 				g.DrawString(nodeInfo, font, Brushes.Black, rect);
@@ -67,14 +83,14 @@ namespace HospitalAppointment
 			// Sol çocuk düğümü çiz ve bağlantıyı çiz
 			if (node.LeftC != null)
 			{
-				g.DrawLine(Pens.Black, x-50, y+20, x - xOffset, y + 50);
+				g.DrawLine(Pens.Black, x - 50, y + 20, x - xOffset, y + 50);
 				DrawNode(g, node.LeftC, x - xOffset, y + 50, xOffset / 2);
 			}
 
 			// Sağ çocuk düğümü çiz ve bağlantıyı çiz
 			if (node.RightC != null)
 			{
-				g.DrawLine(Pens.Black, x+50 , y+20 , x + xOffset, y + 50);
+				g.DrawLine(Pens.Black, x + 50, y + 20, x + xOffset, y + 50);
 				DrawNode(g, node.RightC, x + xOffset, y + 50, xOffset / 2);
 			}
 		}

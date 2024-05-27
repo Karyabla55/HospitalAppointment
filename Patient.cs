@@ -18,7 +18,7 @@ namespace HospitalAppointment
 		public string BleedCondition;
 		public TimeSpan RegisterTime;
 		public TimeSpan InspectionTime;
-		public int InspectionDuration;
+		public TimeSpan InspectionDuration;
 		public int PriorityPoint;
 
 		public Patient(string patientName, int patientAge, char[] gender, bool ısPrisoner, int disabiltyPoint, string bleedCondition, TimeSpan registerTime)
@@ -116,7 +116,7 @@ namespace HospitalAppointment
 		{
 			return PatientNo + "," + PatientName + "," + PatientAge + "," +
 				Gender[0] + "," + IsPrisoner + "," + DisabilityPoint + "," +
-				BleedCondition + "," + RegisterTime.ToString()+","+ PriorityPoint;
+				BleedCondition + "," + RegisterTime.ToString()+","+ PriorityPoint + "," + InspectionDuration;
 		}
 	}
 }

@@ -89,44 +89,67 @@ namespace HospitalAppointment
 		}
 		public Patient ExtractElement()
 		{
+
 			if (root == null)
 			{
 				return null;
 			}
-			Patient next = root.Data;
-			HeapifyDown(root);
-			return next;
+
+			Patient extractedData = root.Data;
+
+			// Find the last node
+			TNode lastNode = GetLastNode();
+			if (lastNode != root)
+			{
+				// Replace root data with last node data
+				root.Data = lastNode.Data;
+
+				// Remove the last node
+				TNode parent = GetParent(lastNode);
+				if (parent.LeftC == lastNode)
+				{
+					parent.LeftC = null;
+				}
+				else if (parent.RightC == lastNode)
+				{
+					parent.RightC = null;
+				}
+
+				// Heapify down the root to restore heap property
+				HeapifyUp(root);
+			}
+			else
+			{
+				root = null;
+			}
+
+			return extractedData;
 		}
-		private void HeapifyDown(TNode root)
+
+
+		private TNode GetLastNode()
 		{
-			TNode current = root;
-			while (current.LeftC != null)
+			LinkList<TNode> ListLastNode = new LinkList<TNode>();
+			ListLastNode.addToLast(root);
+			TNode lastNode = null;
+
+			while (ListLastNode.size > 0)
 			{
-				TNode largerChild = current.LeftC;
-				if (current.RightC != null)
+				lastNode = ListLastNode.root.Data;
+				ListLastNode.ExtractToHead();
+
+				if (lastNode.LeftC != null)
 				{
-					if (current.LeftC.Data.PriorityPoint > current.RightC.Data.PriorityPoint)
-					{
-						Swap(largerChild, current);
-						current = largerChild;
-					}
-					else if (current.RightC.Data.PriorityPoint >= current.LeftC.Data.PriorityPoint)
-					{
-						largerChild = current.RightC;
-						Swap(largerChild, current);
-						current = largerChild;
-					}
+					ListLastNode.addToLast(lastNode.LeftC);
 				}
-				else
+
+				if (lastNode.RightC != null)
 				{
-					Swap(largerChild, current);
-					current = largerChild;
+					ListLastNode.addToLast(lastNode.RightC);
 				}
 			}
-			if (current.LeftC == null && current.RightC == null)
-			{
-				current = null;
-			}
+
+			return lastNode;
 		}
 
 		private TNode GetParent(TNode node)

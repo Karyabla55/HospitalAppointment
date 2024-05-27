@@ -24,11 +24,11 @@ namespace HospitalAppointment
 		{
 			switch (bleedingStatus)
 			{
-				case "kanamaYok":
+				case "kanamaYok ":
 					return 0;
-				case "kanama":
+				case "kanama    ":
 					return 10;
-				case "ağırKanama":
+				case "agirKanama":
 					return 20;
 				default:
 					return 0;
@@ -36,13 +36,13 @@ namespace HospitalAppointment
 			}
 		}
 
-		public static int CalculateInspectionDuration(Patient patient)
+		public static TimeSpan CalculateInspectionDuration(Patient patient)
 		{
 			int AgePoint = CalculateAgePoint(patient.PatientAge);
 			int DisabiltyPoint = CalculateDisabiltyPoint(patient.DisabilityPoint);
 			int BleedConditon = CalculateBleedPoint(patient.BleedCondition);
 
-			return AgePoint + DisabiltyPoint + BleedConditon;
+			return new TimeSpan(0, AgePoint + DisabiltyPoint + BleedConditon+10,0);
 		}
 	}
 }

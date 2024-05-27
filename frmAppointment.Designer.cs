@@ -31,6 +31,7 @@
 		private void InitializeComponent()
 		{
 			this.lblTime = new System.Windows.Forms.Label();
+			this.lblPatient = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// lblTime
@@ -42,11 +43,21 @@
 			this.lblTime.TabIndex = 0;
 			this.lblTime.Text = "Time";
 			// 
+			// lblPatient
+			// 
+			this.lblPatient.AutoSize = true;
+			this.lblPatient.Location = new System.Drawing.Point(83, 397);
+			this.lblPatient.Name = "lblPatient";
+			this.lblPatient.Size = new System.Drawing.Size(46, 16);
+			this.lblPatient.TabIndex = 1;
+			this.lblPatient.Text = "Hasta:";
+			// 
 			// frmAppointment
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 450);
+			this.Controls.Add(this.lblPatient);
 			this.Controls.Add(this.lblTime);
 			this.Name = "frmAppointment";
 			this.Text = "Form1";
@@ -58,6 +69,7 @@
 		#endregion
 
 		private System.Windows.Forms.Label lblTime;
+		private System.Windows.Forms.Label lblPatient;
 	}
 }
 
