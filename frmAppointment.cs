@@ -20,7 +20,7 @@ namespace HospitalAppointment
 			simulatedTime = new DateTime(2024, 5, 28, 8, 0, 0);
 			// Timer'ı oluştur ve ayarla
 			timer = new System.Windows.Forms.Timer();
-			timer.Interval = 100; // 100 milisaniye (0.1 saniye)
+			timer.Interval = 1000; // 1000 milisaniye (1 saniye)
 			timer.Tick += Timer_Tick; // Tick olayına işleyici ekle
 			timer.Start(); // Timer'ı başlat
 		}
@@ -28,15 +28,15 @@ namespace HospitalAppointment
 		{
 
 			simulatedTime = simulatedTime.AddSeconds(120);
-			system.GetRegister(DateTimeToTimeSpan(simulatedTime));
-			if (DateTimeToTimeSpan(simulatedTime) >= system.StartTime && system.treeList != null)
+			system.GetRegister(simulatedTime);
+			if (simulatedTime >= system.StartTime && system.treeList != null)
 			{
-				if (system.treeList != null && !system.RoomIsFull)
+				if (system.treeList.root != null && !system.RoomIsFull)
 				{
 					SendedPatient = system.Next();
-					system.SendInspection(DateTimeToTimeSpan(simulatedTime));
+					system.SendInspection(simulatedTime);
 				}
-				else if (SendedPatient.InspectionDuration + SendedPatient.InspectionTime <= DateTimeToTimeSpan(simulatedTime))
+				else if (AddTime(SendedPatient.InspectionTime,SendedPatient.InspectionDuration) <= simulatedTime)
 				{
 					system.RoomIsFull = false;
 				}
@@ -46,11 +46,22 @@ namespace HospitalAppointment
 			lblTime.Text = simulatedTime.ToString("HH:mm:ss");
 			Invalidate();
 		}
-		private TimeSpan DateTimeToTimeSpan(DateTime Time)
+
+		public DateTime AddTime(DateTime FirstTime, DateTime SecondTime)
 		{
-			TimeSpan time = TimeSpan.Parse(Time.ToString("HH:mm:ss"));
-			return time;
+			// İki DateTime nesnesinin saat ve dakika bilgilerini al
+			TimeSpan firstTimeSpan = FirstTime.TimeOfDay;
+			TimeSpan secondTimeSpan = SecondTime.TimeOfDay;
+
+			// İki TimeSpan'i topla
+			TimeSpan resultTimeSpan = firstTimeSpan + secondTimeSpan;
+
+			// Toplam sonucunu yeni bir DateTime nesnesi olarak geri döndür
+			DateTime resultDateTime = DateTime.Today.Add(resultTimeSpan);
+
+			return resultDateTime;
 		}
+
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			base.OnPaint(e);
@@ -66,15 +77,15 @@ namespace HospitalAppointment
 				return;
 
 			// Düğümü çiz
-			int rectWidth = 100;
-			int rectHeight = 50;
+			int rectWidth = 150;
+			int rectHeight = 100;
 			Rectangle rect = new Rectangle(x - rectWidth / 2, y - rectHeight / 2, rectWidth, rectHeight);
 			g.FillRectangle(Brushes.LightBlue, rect);
 			g.DrawRectangle(Pens.Black, rect);
 
 			// Düğüm bilgilerini yaz
 			string nodeInfo = $"Kayıt Sırası: {node.Data.PatientNo}\nİsim:{node.Data.PatientName}\nYaş: {node.Data.PatientAge}\nÖncelik Puanı: {node.Data.PriorityPoint}";
-			using (Font font = new Font("Arial", 8))
+			using (Font font = new Font("Arial", 12))
 			{
 				g.DrawString(nodeInfo, font, Brushes.Black, rect);
 			}
@@ -82,14 +93,14 @@ namespace HospitalAppointment
 			// Sol çocuk düğümü çiz ve bağlantıyı çiz
 			if (node.LeftC != null)
 			{
-				g.DrawLine(Pens.Black, x - 50, y + 20, x - xOffset, y + 50);
+				g.DrawLine(Pens.Black, x - 75, y + 20, x - xOffset, y + 50);
 				DrawNode(g, node.LeftC, x - xOffset, y + 50, xOffset / 2);
 			}
 
 			// Sağ çocuk düğümü çiz ve bağlantıyı çiz
 			if (node.RightC != null)
 			{
-				g.DrawLine(Pens.Black, x + 50, y + 20, x + xOffset, y + 50);
+				g.DrawLine(Pens.Black, x + 75, y + 20, x + xOffset, y + 50);
 				DrawNode(g, node.RightC, x + xOffset, y + 50, xOffset / 2);
 			}
 		}

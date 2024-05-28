@@ -12,17 +12,14 @@ namespace HospitalAppointment
 		public LinkList<Patient> AllPatients = new LinkList<Patient>();
 		public TreeList treeList = new TreeList();
 		public bool RoomIsFull = false;
-		public TimeSpan StartTime = new TimeSpan(9, 0, 0);
-		public TimeSpan EndTime = new TimeSpan(17, 0, 0);
+		public DateTime StartTime = new DateTime(2024, 5,28,9,0,0);
 
 		public void Start()
 		{
 			Patient.OrganizePatients(AllPatients);
-			/*
-			treeList.AddElement(AllPatients.root.Data);
-			AllPatients.ExtractToHead();*/
+
 		}
-		public void GetRegister(TimeSpan RegisterTime)
+		public void GetRegister(DateTime RegisterTime)
 		{
 			if ( AllPatients.root != null  )
 			{
@@ -37,7 +34,7 @@ namespace HospitalAppointment
 				
 			}
         }
-		public void SendInspection(TimeSpan Time)
+		public void SendInspection(DateTime Time)
 		{
 			Patient next = NextPatient();
 			next.InspectionTime = Time;

@@ -16,12 +16,12 @@ namespace HospitalAppointment
 		public bool IsPrisoner;
 		public int DisabilityPoint;
 		public string BleedCondition;
-		public TimeSpan RegisterTime;
-		public TimeSpan InspectionTime;
-		public TimeSpan InspectionDuration;
+		public DateTime RegisterTime;
+		public DateTime InspectionTime;
+		public DateTime InspectionDuration;
 		public int PriorityPoint;
 
-		public Patient(string patientName, int patientAge, char[] gender, bool ısPrisoner, int disabiltyPoint, string bleedCondition, TimeSpan registerTime)
+		public Patient(string patientName, int patientAge, char[] gender, bool ısPrisoner, int disabiltyPoint, string bleedCondition, DateTime registerTime)
 		{
 			PatientName = patientName;
 			PatientAge = patientAge;
@@ -53,7 +53,7 @@ namespace HospitalAppointment
 						bool IsPrisoner = bool.Parse(PatientData[4]);
 						int Disabilty = int.Parse(PatientData[5]);
 						string Bleeding = PatientData[6];
-						TimeSpan RegisterTime = StringToTime(PatientData[7]);
+						DateTime RegisterTime = StringToTime(PatientData[7]);
 
 						Patient patient = new Patient(PatientName, PatiensAge, Gender, IsPrisoner, Disabilty, Bleeding, RegisterTime);
 						/*patient.PriorityPoint = PatientStatus.CalculatePriortyPoint(patient);
@@ -105,10 +105,10 @@ namespace HospitalAppointment
 				i++;
 			}
 		}
-		private static TimeSpan StringToTime(string str)
+		private static DateTime StringToTime(string str)
 		{
 			string[] time = str.Split('.');
-			TimeSpan organizedTime = TimeSpan.Parse(time[0] + ":" + time[1]);
+			DateTime organizedTime = DateTime.Parse(time[0] + ":" + time[1]);
 			return organizedTime;
 		}
 		

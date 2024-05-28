@@ -36,13 +36,13 @@ namespace HospitalAppointment
 			}
 		}
 
-		public static TimeSpan CalculateInspectionDuration(Patient patient)
+		public static DateTime CalculateInspectionDuration(Patient patient)
 		{
 			int AgePoint = CalculateAgePoint(patient.PatientAge);
 			int DisabiltyPoint = CalculateDisabiltyPoint(patient.DisabilityPoint);
 			int BleedConditon = CalculateBleedPoint(patient.BleedCondition);
 
-			return new TimeSpan(0, AgePoint + DisabiltyPoint + BleedConditon+10,0);
+			return new DateTime(2024,5,28,0, AgePoint + DisabiltyPoint + BleedConditon+10,0);
 		}
 	}
 }

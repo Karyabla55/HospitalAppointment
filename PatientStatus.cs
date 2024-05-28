@@ -10,15 +10,15 @@ namespace HospitalAppointment
 	{
 		protected static int CalculateAgePoint(int age)
 		{
-			if (0 >= age && age < 5)
+			if (age < 5)
 			{
 				return 20;
 			}
-			else if (age <= 5 && age < 45)
+			else if ( age < 45)
 			{
 				return 0;
 			}
-			else if (45 <= age && age < 65)
+			else if (age < 65)
 			{
 				return 15;
 			}
@@ -34,9 +34,9 @@ namespace HospitalAppointment
 		{
 			switch (bleedingStatus)
 			{
-				case "kanamaYok":
+				case "kanamaYok ":
 					return 0;
-				case "kanama":
+				case "kanama    ":
 					return 20;
 				case "agirKanama":
 					return 50;
